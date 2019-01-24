@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<body>
+	</body>
+	<script>
+		/*map和reduce函数均是接受两个参数，第一个参数，均是一个函数，可以是匿名函数，也可以是普通的函数，第二个参数是一个可迭代的序列（列表 或元组）
+        map函数的第一个参数是函数，函数的参数可以是1个或者多个，而reduce只能接受2个参数。
+        map()是将传入的函数依次作用到序列的每个元素，每个元素都是独自被函数“作用”一次 。
+        reduce()是将传人的函数作用在序列的第一个元素得到结果后，把这个结果继续与下一个元素作用（累积计算）。*/
+		//map,各个参数之间并行操作
+/*		var arr_1=[1,2,3,4,5,6]
+		function pow (x) {
+			return x*x;
+		}
+		var result_1=arr_1.map(pow);
+		console.log(result_1);
+		
+		//reduce,合并操作
+		var arr_2=[1,3,5,7,9];
+		var result_2=arr_2.reduce(function (x,y){
+			return x*10+y;
+		});
+		console.log(result_2);  //13579
+		*/
+		
+		//filter,过滤，选择性的保留数据
+		//实例：删除偶数，保留奇数
+		var arr_1=[1,2,4,6,7,8,9,11];
+		var r=arr_1.filter(function(x){
+			return x % 2 !==0;
+		});
+		console.log(r);//[1, 7, 9, 11]
+		//实例：把一个Array中的空字符串删掉
+		var arr_2=['A', '', 'B', null, undefined, 'C', '  '];
+		var r_1 = arr_2.filter(function (s) {
+            return s && s.trim(); // 注意：IE9以下的版本没有trim()方法
+        });
+        console.log(r_1);
+	</script>
+</html>
+<script>
+    $('.setting_terminal').click(function() {
+        var dialog = mauna.lavaDialog({
+            title: '设置', // 标题
+            url: '?app=vehicle&controller=vehicle&action=terminal_table_setting', // 地址
+            width: $(document).width() * 0.5, // 宽度
+            height: 'fill', // 高度
+            overflow: 'hidden', // 隐藏
+            modalInited: function(formDialog) {
+                formDialog.find('.mauna-form-parent').hide();
+                formDialog.find('.mauna-form-parent').last().show();
+            },
+            callback: function(dialogobj) {
+                var pinned = $('#table-setting-pinned').val();
+                var setting = '[';
+                dialogobj.find('.table-columns-select').each(function(i, e) {
+                    var _this = $(this);
+                    var column;
+                    setting = setting + '{"name":"' + _this.attr('column-text') + '","field":"' + _this.attr('column') + '","width":"' + parseInt(_this.attr('column-width')) + '"},';
+                });
+                setting = setting.substring(0, (setting.length - 1) || 1) + ']';
+                $.ajax({
+                    type: 'GET',
+                    url: '?app=vehicle&controller=table&action=setFields',
+                    data: {
+                        tag: 'terminal',
+                        setting: setting,
+                        pinned: pinned,
+                    },
+                    success: function(data) {
+                        if (data.state) {
+                            mauna.tips('设置成功', 'success');
+                            var setting = $.parseJSON(data.data.setting);
+                            var pinned = data.data.pinned;
+                            if (setting.length > 0) {
+                                terminal_columns = [
+                                    { headerName: '', cellStyle: { 'text-align': 'center' }, width: 40, headerTooltip: '', suppressSizeToFit: true, suppressMenu: true, checkboxSelection: true, field: 'checkbox', headerCheckboxSelection: true },
+                                    { headerName: '序号', cellRenderer: function(data) { return data.rowIndex + 1; }, cellStyle: { 'text-align': 'center' }, width: 40, headerTooltip: '序号', suppressSizeToFit: true, suppressMenu: true, field: 'no', cellClass: 'default' },
+                                ];
+                                for (var i = 0; i < setting.length; i++) {
+                                    if (setting[i].field === 'sim') {
+                                        terminal_columns.push({ headerName: setting[i].name, width: parseInt(setting[i].width), headerTooltip: setting[i].name, field: setting[i].field, cellStyle: { 'text-align': 'right' }, suppressSizeToFit: true, suppressMenu: true, cellClass: 'default' });
+                                    } else {
+                                        terminal_columns.push({ headerName: setting[i].name, width: parseInt(setting[i].width), headerTooltip: setting[i].name, field: setting[i].field, cellStyle: { 'text-align': 'center' }, suppressSizeToFit: true, suppressMenu: true, cellClass: 'default' });
+                                    }
+                                }
+                                terminal_columns.push({
+                                    headerName: '管理操作',
+                                    headerTooltip: '管理操作',
+                                    field: 'manage',
+                                    minWidth: 180,
+                                    width: 180,
+                                    pinned: 'right',
+                                    // suppressSizeToFit:true,
+                                    suppressMenu: true,
+                                    cellStyle: { 'text-align': 'center' },
+                                    cellRenderer: function(data) {
+                                        // console.warn(data,'终端');
+                                        var terminal = data.data._id;
+                                        var html = '<img src="common/mauna/images/view.svg" width="16" alt="查看" data-toggle="tooltip" title="查看" class="manage view_row_img ui-table-img" onclick="window.view_terminal(' + '\'' + terminal + '\'' + ');" style="margin-left:3px; margin-right:3px; cursor: pointer" onmouseover="window.change_img(this)" onmouseout="window.change_img_return(this)" />' +
+                                            '<img src="common/mauna/images/edit.svg" width="16" alt="编辑" data-toggle="tooltip" title="编辑" class="manage edit_row_img ui-table-img" onclick="window.manage_terminal(' + '\'' + terminal + '\'' + ');" style="margin-left:3px; margin-right:3px; cursor: pointer" onmouseover="window.change_img(this)" onmouseout="window.change_img_return(this)" />' +
+                                            '<img src="common/mauna/images/car_group.png" width="16" alt="更换车辆分组" data-toggle="tooltip" title="更换车辆分组" class="manage change_team_row_img ui-table-img" onclick="window.change_team_terminal_rowcallback(' + '\'' + terminal + '\'' + ');" style="margin-left:3px; margin-right:3px; cursor: pointer" onmouseover="window.change_img(this)" onmouseout="window.change_img_return(this)" />' +
+                                            '<img src="common/mauna/images/delete.svg" width="16" alt="删除" data-toggle="tooltip" title="删除" class="manage delete_row_img ui-table-img" onclick="window.delete_terminal_rowcallback(' + '\'' + terminal + '\'' + ');" style="margin-left:3px; margin-right:3px; cursor: pointer" onmouseover="window.change_img(this)" onmouseout="window.change_img_return(this)" />';
+                                        return html;
+                                    },
+                                }/*, { headerName: "", field: 'mauna_extra_cell', minWidth: 56, maxWidth: 56, suppressMovable: true, suppressMenu: true } */);
+                                for (var i = 0; i < pinned; i++) {
+                                    terminal_columns[i].pinned = 'left';
+                                }
+                                terminal_table.setColumnDefs(terminal_columns);
+                                terminal_table.sizeColumnsToFit();
+                            }
+                        }
+                    },
+                    dataType: 'string',
+                });
+                return true;
+            }, // 回调
+            cancle: function() {
+                return true;
+            }, // 取消回调
+        });
+    });
+</script>

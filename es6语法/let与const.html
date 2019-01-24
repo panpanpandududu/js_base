@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<body>
+	</body>
+	<script>
+    //let声明的变量只在let所在代码块中有效
+
+    {
+     let a=1;
+      var b=2;
+    }
+  //  console.log(a);    //a is not defined
+  //  console.log(b);    //2
+
+//模拟for计数器
+    for (let i=0;i<10;i++){
+       //console.log(i);  //0,1,2,3,4,5,6,7,8,9
+    }
+    //console.log(i);   // i is not defined
+
+var a=[];
+for(var i=0;i<10;i++){ //因为是var声明的i，所以此时i为全局变量
+  a[i]=function(){
+		//console.log(i);
+	}
+	a[i](); //0,1,2,3,4,5,6,7,8,9
+}
+//console.log(i);//i=10
+	a[1]();//10,此时i为最后一轮i的值
+
+	for(let i=0;i<10;i++){ //因为是let声明的i，所以此时i为局部变量
+	  a[i]=function(){
+			//console.log(i);
+		}
+		a[i](); //0,1,2,3,4,5,6,7,8,9
+	}
+	a[9]();//9
+	for(let i=0;i<5;i++){
+				 setTimeout(function(){
+						// console.log("let" + i);//let0 let1 let2 let3 let4
+				})
+	}
+	
+	</script>
+</html>

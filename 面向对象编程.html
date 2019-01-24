@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>面向对象编程</title>
+	</head>
+	<body>
+	</body>
+	<script>
+//类：对象的类型模板
+//实例：类创建的对象
+//首先了解下proto(__proto__)和prototype的区别
+/* 
+ * 在js里万物皆对象，Function（方法）是对象，方法的原型（Function.prototype）也是对象。
+ * 对象具有属性proto，可称为隐式原型。一个对象的隐式原型指向构造该对象的构造函数的原型。
+ * 保证了实例能够访问在构造函数原型中定义的属性和方法
+ * 方法不仅和其他对象一样有proto属性，还具有自身特有的原型属性prototype
+ * Object.getPrototypeOf()标准方法访问该属性
+ * 这个属性是个指针，指向一个对象，这个对象的用途就是包含所有实例共享的属性和方法。我们把这个对象叫做原型对象。
+ * 原型对象也有一个属性constructor,这个属性包含了一个指针，指回原构造函数
+ */
+        var a=function () {
+        	
+        };
+        var b={};
+        console.log("a的proto",a.__proto__.__proto__);
+        console.log("b的proto",b.__proto__);
+	</script>
+</html>

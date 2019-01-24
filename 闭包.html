@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<body>
+	</body>
+	<script>
+		//1.词法作用域
+		/*function init () {
+			var name='google';  //name是一个被init创建的局部变量
+			function displayName(){  //displayName是内部函数，仅在该函数体内可用，一个闭包
+				console.log(name);  //使用了父函数中声明的变量
+			}
+			displayName(); 
+			/*displayName() 内没有自己的局部变量，然而它可以访问到外部函数的变量，所以 displayName() 可以使用父函数 init() 中声明的变量 name 。
+			 但是，如果有同名变量 name 在 displayName() 中被定义，则会使用 displayName() 中定义的 name 。
+		}
+		init();*/
+		
+		//2.闭包
+		//例1
+		function makeFunc(){
+			var name='Google';
+			function displayName(){
+				//console.log(name);
+			}
+			return displayName;
+		}
+		var funn=makeFunc();  //funn是displayName函数实例的引用
+		funn(); //Google
+		//例2
+		function makeArr (x) {
+			return function (y) {
+				return x+y;
+			}
+		}
+		var add5=makeArr(5);
+		//console.log(add5);
+		/*此时add5返回的是ƒ (y) {
+				return x+y;
+			}*/	
+		//console.log(add5(2));//返回的是 7
+		
+		//比较下列两个闭包
+		//1.调用此函数直接求和
+		function sum(arr){
+			return arr.reduce(function(x,y){
+				return x+y;
+			});
+		}
+		var arr_1=sum([1, 2, 3, 4, 5]);
+		//console.log(arr_1);   //15
+		//2.先不求和，先返回求和函数，后续有需求再求和
+		function last_sum(arr){
+			var sum=function () {
+				return arr.reduce(function(x,y){
+					return x+y;
+				});
+			}
+			return sum;
+		}
+		//当我们调用lazy_sum()时，返回的并不是求和结果，而是求和函数
+		var f=last_sum([1,2,3,4,5,6]);
+		//console.log(f); //输出的是function sum()，即下面形式
+		/*ƒ () {
+				return arr.reduce(function(x,y){
+					return x+y;
+				});
+			}*/
+		//调用函数f时，才真正计算求和的结果
+		f(); //21
+		/*在这个例子中我们在last_sum中又定义了sum函数，sum函数可以引用外部函数lazy_sum的参数和局部变量，当lazy_sum返回函数sum时，相关参数和变量都保存在返回的函数中
+		请再注意一点，当我们调用lazy_sum()时，每次调用都会返回一个新的函数，即使传入相同的参数：
+        var f1 = lazy_sum([1, 2, 3, 4, 5]);
+        var f2 = lazy_sum([1, 2, 3, 4, 5]);
+        f1 === f2; // false
+        f1()和f2()的调用结果互不影响。*/       
+       //
+        function count(){
+       	    var arr=[];
+       	    for(var i=1;i<3;i++){
+       		    arr.push(function  () {
+       			    return i*i;
+       		    });
+       	    }
+       	    return arr;
+        }
+       var result=count();
+      // console.log(result); //[ƒ, ƒ]
+       var f1=result[0];
+       var f2=result[1];
+       // console.log(f1); 
+     /*   返回的是函数ƒ () {
+       			    return i*i;
+       		    }*/
+       	f1();//9
+       	f2();//9
+       	/*因为执行完三个函数后，i已经变为4*/
+       	
+      
+       
+      
+	</script>
+</html>

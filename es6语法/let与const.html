@@ -44,6 +44,64 @@ for(var i=0;i<10;i++){ //因为是var声明的i，所以此时i为全局变量
 						// console.log("let" + i);//let0 let1 let2 let3 let4
 				})
 	}
-	
+
+	//let不存在变量提升，var存在
+	//console.log(test_var); //undefined
+	var test_var=3;
+ //console.log(test_let);
+  let test_let=3;
+
+	var  tmp=123;
+	if(true){
+	//	tmp='abc';  //此时tmp为undefined,因为let重新为tmp声明了局部变量
+		let tmp;
+	}
+	//console.log(tmp); //abc
+ //typeof x;  //ReferenceError
+ let x;
+
+ function bar(x = 2, y = x) {
+  return [x, y];
+}
+bar(); // [2, 2]
+//console.log(bar());
+
+//let test=test;  //undefined
+//console.log(test);
+
+function func(arg) {
+	let arg;
+}
+
+var temp=new Date();
+function f() {
+	//console.log(temp);
+	if (false) {
+		var temp ='hello world';
+	}
+}
+f();//undefined
+
+//因为let为块级作用域，外层代码不受内层代码的影响
+function f1() {
+	let n=5;
+	if (true) {
+		let n=10;
+	//	console.log(n); //10
+	}
+	//console.log(n); //5
+}
+f1();
+
+//函数声明在块级作用域中
+//$(document).ready()的三种简写：$(document).ready(function(){})；$().ready(function(){})；$(function(){})
+function f() { console.log('I am outside!'); }
+
+(function(){
+	if (false) {
+		function f(){console.log('I am inside!');	}
+	}
+	f();
+}());
 	</script>
 </html>

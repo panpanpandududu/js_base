@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <title></title>
+</head>
+
+<body>
+</body>
+<script type="text/javascript">
+// function func(num) {
+// console.log("前行阶段");
+// if (!num) { //递归终止条件
+// console.log("递归在此结束");
+// } else {
+// func(--num); //递归调用
+// }
+// console.log(num);
+// }
+// func(1);
+//
+// function test(n){
+// if(n == 1){
+// return 1;
+// }else{
+// return n * test(n-1);
+// }
+// }
+// console.log(test(5));//120
+//
+// function Recursion(depth) {
+// console.log('抱着');
+// if (!depth) {
+// console.log('我的小鲤鱼')
+// } else {
+// Recursion(--depth); // 递归调用
+// }
+// console.log('的我');
+// }
+// Recursion(2);
+
+ //思考，因为栈的大小是有限的，当n=无穷大时栈肯定会溢出，如何优化
+
+ function newTest(n,result){
+    if (n=1){
+      return result;
+    }else {
+       return newTest(n-1,n*result);
+    }
+ }
+ console.log(newTest(5));
+
+</script>
+
+</html>

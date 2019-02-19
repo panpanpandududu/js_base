@@ -95,13 +95,57 @@ f1();
 
 //函数声明在块级作用域中
 //$(document).ready()的三种简写：$(document).ready(function(){})；$().ready(function(){})；$(function(){})
-function f() { console.log('I am outside!'); }
+function f() {
+//	console.log('I am outside!');
+ }
 
 (function(){
+	//var f = undefined;因为在块级作用域里的函数声明会提升到所在的块级作用域的头部。
 	if (false) {
-		function f(){console.log('I am inside!');	}
+		function f(){
+			//console.log('I am inside!');
+			}
 	}
-	f();
+//	f();//f is not a function
 }());
+
+//const用法
+const pi=3.1415;
+//pi=3;
+//console.log(pi);  //表明改变常量的值会报错
+//const foo;
+//console.log(foo);
+
+if(true){
+//	console.log(max);//Missing initializer in const declaration,因为const常量不可提升，不能在声明之前使用
+	const max=5;
+}
+
+//const实际上保证的是变量指向的那个内存地址所保存的数据不可改动
+const foo={};
+//为foo添加一个属性
+foo.prop=123;
+//将foo指向另一个对象，就会报错
+//foo={};
+//console.log(foo);//Assignment to constant variable,常量不可变
+const a_arr=[];
+a_arr.push('hello');
+a_arr.lengh=0;
+//console.log(a_arr);//["hello", lengh: 0]
+//a_arr=['dave'];//Assignment to constant variable.此时将另一数组赋给a
+
+//对象冻结
+const freobj=Object.freeze({});
+freobj.prop=123;//此时不起作用,{}已被冻结
+console.log(freobj);//{}
+//对象及其属性冻结
+var constantize = (obj) =>{
+	Object.freeze(obj);
+	Object.keys(obj).forEach((key,i)=>{
+		if(typeof obj[key]==='object'){
+			constantize(obj[key]);
+		}
+	});
+};
 	</script>
 </html>

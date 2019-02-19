@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+  </head>
+  <body>
+  </body>
+  <script type="text/javascript">
+    let [a, ,b]=[1,2,3];
+   // console.log(b);  //3
+
+    let [ , ,third]=['foo','bar','baz'];
+    //console.log(third);  //baz
+
+    let [foo,[[bar],baz]]=[1,[[2],3]];
+    //console.log(bar);  //2
+
+    let [x,y,...z]=['a'];
+    //x='a',y=undefined,z=[]
+
+    //let [arr_1]=2; //右边的不是可遍历结构
+    //console.log(arr_1);//2 is not iterable
+   
+    // var obj = { 'France': 'Paris', 'England': 'London' };
+    // for (let p of obj) { // TypeError: obj is not iterable  obj不可迭代
+    //      console.log(11);  //es6可用
+    // }
+
+    let [arr_1]=1;
+    console.log(arr_1);
+  </script>
+</html>
